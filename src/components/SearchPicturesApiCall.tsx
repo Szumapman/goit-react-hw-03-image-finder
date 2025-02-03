@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { SearchBar } from "./SearchBar";
 import { ButtonLoadMore } from "./ButtonLoadMore";
 import { ImageGallery } from "./ImageGallery";
-import { BallTriangle } from 'react-loader-spinner'
+import { Bars } from 'react-loader-spinner'
 import * as basicLightbox from 'basiclightbox';
 import 'basiclightbox/dist/basicLightbox.min.css';
 import css from './SearchPicturesApiCall.module.css'
@@ -19,6 +19,7 @@ export const SearchPicturesApiCall = () => {
     const [isMorePictures, setIsMorePictures] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isGalleryLoading, setIsGalleryLoading] = useState(false);
+    const [loadedImages, setLoadedImages] = useState(0);
     
     const { data, error, refetch } = useQuery({
         queryKey: ['pictures', query, page, perPage],
@@ -65,6 +66,12 @@ export const SearchPicturesApiCall = () => {
         }
     }, [data, error]);
 
+    useEffect(() => {
+        if (loadedImages === pictures.length && loadedImages !== 0) {
+            setIsGalleryLoading(false);
+        }
+    }, [loadedImages, pictures.length]);
+
     const handlePictureClick = (image: Picture) => {
         const instance = basicLightbox.create(`<img src="${image.largeImageURL}">`);
         instance.show();
@@ -87,10 +94,10 @@ export const SearchPicturesApiCall = () => {
             <div className={css.App}>
                 {error && <p>Error</p>}
                 <div>
-                    {query && <ImageGallery images={pictures} perPage={perPage} handleImageClick={handlePictureClick} setIsGalleryLoading={setIsGalleryLoading} />}
+                    {query && <ImageGallery images={pictures} perPage={perPage} handleImageClick={handlePictureClick} onImageLoad={() => setLoadedImages(prev => prev + 1)} />}
                 </div>
                 <div>
-                    {(loading || isGalleryLoading) && <BallTriangle height={100} width={100} radius={5} color="#4fa94d" ariaLabel="ball-triangle-loading" />}
+                    {(loading || isGalleryLoading) && <Bars height={100} width={100} color="#4fa94d" ariaLabel="ball-triangle-loading" />}
                     <div ref={picturesEndRef}></div>
                 </div>
                 <div>
