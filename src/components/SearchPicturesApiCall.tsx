@@ -94,7 +94,7 @@ export const SearchPicturesApiCall = () => {
             <div className={css.App}>
                 {error && <p>Error</p>}
                 <div>
-                    {query && <ImageGallery images={pictures} perPage={perPage} handleImageClick={handlePictureClick} onImageLoad={() => setLoadedImages(prev => prev + 1)} />}
+                    {query && <ImageGallery images={pictures} handleImageClick={handlePictureClick} onImageLoad={() => setLoadedImages(prev => prev + 1)} />}
                 </div>
                 <div>
                     {(loading || isGalleryLoading) && <Bars height={100} width={100} color="#4fa94d" ariaLabel="ball-triangle-loading" />}
