@@ -18,6 +18,7 @@ export const SearchPicturesApiCall = () => {
     const [pictures, setPictures] = useState<Picture[]>([])
     const [isMorePictures, setIsMorePictures] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isGalleryLoading, setIsGalleryLoading] = useState(false);
     
     const { data, error, refetch } = useQuery({
         queryKey: ['pictures', query, page, perPage],
@@ -86,14 +87,17 @@ export const SearchPicturesApiCall = () => {
             <div className={css.App}>
                 {error && <p>Error</p>}
                 <div>
-                    {query && <ImageGallery images={pictures} handleImageClick={handlePictureClick} />}
+                    {query && <ImageGallery images={pictures} perPage={perPage} handleImageClick={handlePictureClick} setIsGalleryLoading={setIsGalleryLoading} />}
+                </div>
+                <div>
+                    {(loading || isGalleryLoading) && <BallTriangle height={100} width={100} radius={5} color="#4fa94d" ariaLabel="ball-triangle-loading" />}
                     <div ref={picturesEndRef}></div>
                 </div>
-                {loading && <BallTriangle height={100} width={100} radius={5} color="#4fa94d" ariaLabel="ball-triangle-loading" />}
-                {data && !loading && !error && isMorePictures && (
-                    <ButtonLoadMore onClick={() => setPage(prevPage => prevPage + 1)} />
-                )}
-
+                <div>
+                    {data && !loading && !isGalleryLoading && !error && isMorePictures && (
+                        <ButtonLoadMore onClick={() => setPage(prevPage => prevPage + 1)} />
+                    )}
+                </div>
             </div>
         </>
     )
