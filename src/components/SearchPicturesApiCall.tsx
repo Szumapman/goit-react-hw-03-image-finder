@@ -93,7 +93,6 @@ export const SearchPicturesApiCall = () => {
                 {data && !loading && !error && isMorePictures && (
                     <ButtonLoadMore onClick={() => setPage(prevPage => prevPage + 1)} />
                 )}
-
             </div>
         </>
     )
