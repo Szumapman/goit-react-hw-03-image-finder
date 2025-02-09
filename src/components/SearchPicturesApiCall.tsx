@@ -52,9 +52,6 @@ export const SearchPicturesApiCall = () => {
             } else {
                 setPictures(prevPictures => {
                     const newPictures = [...prevPictures, ...data.hits];
-                    setTimeout(() => {
-                        picturesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-                    }, 500); 
                     return newPictures;
                 });
             }
@@ -69,6 +66,7 @@ export const SearchPicturesApiCall = () => {
     useEffect(() => {
         if (loadedImages === pictures.length && loadedImages !== 0) {
             setIsGalleryLoading(false);
+            picturesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         }
     }, [loadedImages, pictures.length]);
 
